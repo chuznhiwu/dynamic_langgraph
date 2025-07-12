@@ -1,0 +1,23 @@
+[
+  {
+    "name": "全面分析数据",
+    "description": "计算均值/方差 + 时域&频域图 + 故障诊断，最后总结",
+    "tasks": ["analysis", "viz", "diagnosis","summarizer"]
+  },
+  {
+    "name": "仅统计",
+    "description": "只需要基本统计量，最后总结",
+    "tasks": ["analysis","summarizer"]
+  },
+  {
+    "name": "文档转换并总结",
+    "description": "需要将doc/docx/pdf/txt/md等文件转换成markdown, 并总结文档摘要",
+    "tasks": ["convert_md", "md_summary"]
+  },
+  {
+    "name": "语音转写并总结",
+    "description": "Whisper 将语音文件转成中文，再做总结",
+    "tasks": ["asr", "audio_summary"]
+  }
+
+]
