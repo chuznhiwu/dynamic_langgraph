@@ -2,10 +2,10 @@
 docker pull docker.1ms.run/pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
 
 ## 启动容器
-docker run --gpus all -d -v /data/user/wucz:/data/user/wucz -p 1050:1050 -p 2630:2630 -p 3810:3810 --network host --name wucz -it docker.1ms.run/pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
+docker run --gpus all -d -v /data/user:/data/user --network host --name wucz -it docker.1ms.run/pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
 
 ## 给挂载文件夹权限
-chmod -R 777 /data/user/wucz
+chmod -R 777 /data/user
 
 ## 进入容器
 docker exec -it wucz /bin/bash
@@ -52,8 +52,8 @@ echo "index-url = https://pypi.tuna.tsinghua.edu.cn/simple" >> ~/.pip/pip.conf
 
 ## 安装whisper
 pip install -U openai-whisper
-pip install git+https://github.com/openai/whisper.git 
-apt update && sudo apt install ffmpeg
+apt update 
+apt install ffmpeg
 pip install setuptools-rust
 pip install faster_whisper
 
@@ -61,8 +61,9 @@ pip install faster_whisper
 datasets fastapi transformers matplotlib 
 langchain langchain-core langchain-ollama langchain-openai langchain-text-splitters
 langgraph langgraph-checkpoint langgraph-prebuilt langgraph-sdk
-pypandoc python-docx pdfminer.six pytesseract pillow pdf2image pandoc
-apt install ffmpeg
+pypandoc python-docx pdfminer.six pytesseract pillow pdf2image
+apt-get install -y tesseract-ocr tesseract-ocr-eng tesseract-ocr-chi-sim
+apt-get install pandoc
 
 ## 安装 Poppler
 apt install poppler-utils
