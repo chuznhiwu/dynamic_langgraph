@@ -6,6 +6,7 @@ from typing import Any
 from pprint import pprint
 from langchain_core.messages import AIMessage
 import datetime, uuid, logging, os
+import re
 
 def load_df(path: str | Path) -> pd.DataFrame:
     """Robustly read numeric TXT/CSV into a DataFrame."""
@@ -37,3 +38,11 @@ def debug_ai_message(ai):
     pprint(ai.usage_metadata)
     print("\n full dict:")
     pprint(ai.model_dump())
+
+
+
+def split_thought_and_answer(content: str) -> tuple[str, str]:
+    match = re.search(r"<think>(.*?)</think>", content, flags=re.S | re.I)
+    thought = match.group(1).strip() if match else ""
+    answer = re.sub(r"<think>.*?</think>", "", content, flags=re.S | re.I).strip()
+    return thought, answer

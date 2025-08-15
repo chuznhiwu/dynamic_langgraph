@@ -1,0 +1,1 @@
+{"NAME": "LangGraph Stream V2", "BACKEND_BASE": "http://host.docker.internal:1050", "MODE": "trace", "TRACE_POLL_SEC": 1.0, "SSE_CONNECT_TIMEOUT": 10.0, "SSE_IDLE_TIMEOUT": 8.0, "DEFAULT_FILE_PATH": null, "PREFER_EXT": null, "INGEST_PATH": "/ingest/openwebui", "ANALYZE_PATH": "/analyze", "STREAM_PATH": "/stream", "TRACE_PATH": "/trace"}

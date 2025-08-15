@@ -22,19 +22,19 @@ python scripts/main.py data/Airplane.mp3 -q "请把这段音频转文字并总�
 pip install --upgrade pip
 pip install "fastapi[all]" "uvicorn[standard]"
 
-启动服务
-uvicorn api_server:app --host 0.0.0.0 --port 1050
 
-在宿主机访问
-curl -X POST http://127.0.0.1:1050/analyze-path\
-  -H "Content-Type: application/json" \
-  -d '{"file_path":"/data/user/wucz/dynamic_langgraph_project_v1.3/data/Airplane.mp3",
-       "query":"请把这段音频转文字并总结要点"}' | jq .
-
+docker run -d --name pipelines \
+  -p 9099:9099 \
+  --add-host=host.docker.internal:host-gateway \
+  -v $PWD/pipelines:/app/pipelines \
+  --restart always \
+  ghcr.io/open-webui/pipelines:main
 
 
-curl -X POST http://127.0.0.1:1050/analyze-path\
-  -H "Content-Type: application/json" \
-  -d '{"file_path":"/data/user/wucz/dynamic_langgraph_project_v1.3/data/ball501.txt",
-       "query":"请全面分析这个数据"}' | jq .
+docker restart pipelines
+docker logs -f pipelines
 
+
+启动 WebUI：export DATA_DIR=/home/wucz/openwebui-data && open-webui serve --port 8081
+
+启动后端：export OPENWEBUI_DATA_DIR=/home/wucz/openwebui-data && uvicorn api_server:app --host 0.0.0.0 --port 1050

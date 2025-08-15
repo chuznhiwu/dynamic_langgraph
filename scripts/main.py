@@ -18,8 +18,8 @@ def main():
     parser.add_argument("-q", "--query", required=True, help="User query / requirement")
     args = parser.parse_args()
 
-    result, tasks = run_dynamic_pipeline(pathlib.Path(args.txt), args.query)
-    print("\n LLM 规划任务流:", tasks)
+    result = run_dynamic_pipeline(pathlib.Path(args.txt), args.query)
+    #print("\n LLM 规划任务流:", tasks)
     print(" 摘要:\n", result["summary"]) # asr_text summary
 
 if __name__ == "__main__":

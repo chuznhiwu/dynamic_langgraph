@@ -5,7 +5,6 @@ to ./graphs/flow_<timestamp>_<uid>.png.
 """
 from pathlib import Path
 import datetime, uuid, logging
-
 from langgraph.graph import StateGraph
 from .data_state import DataState
 from .nodes.loader import loader
@@ -17,6 +16,7 @@ from .nodes.markdown_convert import markdown_convert
 from .nodes.md_summarizer    import md_summarizer
 from .nodes.asr_convert     import asr_convert
 from .nodes.audio_summarizer     import audio_summarizer
+import inspect
 # ─────────────────────────────────────────────────────────
 # 映射 task_name → 节点函数
 # ※ 以后新增节点记得在此添加
@@ -32,16 +32,6 @@ _TASK_NODE_MAP = {
     "audio_summary": audio_summarizer, 
 }
 
-# graphs/ 目录（与 plots/ 同级）
-_GRAPHS_DIR = Path(__file__).resolve().parent.parent / "graphs"
-_GRAPHS_DIR.mkdir(exist_ok=True)
-
-def _new_png_name() -> Path:
-    ts  = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    uid = uuid.uuid4().hex[:6]
-    return _GRAPHS_DIR / f"flow_{ts}_{uid}.png"
-
-
 def build_graph(task_list):
     """
     按 task_list 顺序构建 *串行* LangGraph，
@@ -56,8 +46,8 @@ def build_graph(task_list):
     -------
     compiled : langgraph.graph.CompiledGraph
     """
-    G = StateGraph(DataState)
 
+    G = StateGraph(DataState)
     # ① loader 入口 ------------------------------------------------------------
     G.add_node("loader", loader)
     prev = "loader"
@@ -77,13 +67,6 @@ def build_graph(task_list):
 
     compiled = G.compile()
 
-    # ③ 输出 Mermaid PNG -------------------------------------------------------
-    try:
-        out_png = _new_png_name()
-        png_bytes = compiled.get_graph(xray=True).draw_mermaid_png()
-        out_png.write_bytes(png_bytes)
-        logging.info("流程图已保存：%s", out_png)
-    except Exception as e:
-        logging.warning("流程图生成失败：%s", e)
-
+    print("🚩  build_graph 执行完毕") 
+    
     return compiled

@@ -30,8 +30,8 @@ curl -o /tmp/miniconda.sh -L https://repo.anaconda.com/miniconda/Miniconda3-late
 PATH="/opt/conda/bin:$PATH"
 
 ### 新建conda环境并启动
-conda create -n agent python=3.11
-conda activate agent
+conda create -n openweb python=3.11
+conda activate openweb
 
 ### 安装pytorch
 pip install --upgrade pip
@@ -80,3 +80,8 @@ conda install -c nvidia cudnn=9.3.0.75
 echo 'export LD_LIBRARY_PATH=/opt/conda/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
 source ~/.bashrc
 ls /opt/conda/lib | grep cudnn
+
+
+## 实时推送
+pip install sse-starlette
+pip install sseclient-py
