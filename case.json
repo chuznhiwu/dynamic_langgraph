@@ -19,5 +19,4 @@
     "description": "Whisper 将语音文件转成中文，再做总结",
     "tasks": ["asr", "audio_summary"]
   }
-
 ]
