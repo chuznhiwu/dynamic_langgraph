@@ -6,23 +6,15 @@ diagnosis for vibration‑signal TXT/CSV files.
 
 ## Quickstart
 
-```bash
-pip install -r requirements.txt
-python scripts/main.py data/ball501.txt   -q "请全面分析这个数据" # 请统计这个数据的特征值
-python scripts/main.py data/docx_test.docx -q "请把该文档转 Markdown 并总结内容"
-python scripts/main.py data/test.pdf -q "请把该文档转 Markdown 并总结内容"
-python scripts/main.py data/Airplane.mp3 -q "请把这段音频转文字并总结要点"
-```
+1.按照setup.md 拉取docker,安装必要的包，完成Langgraph后端的环境部署
 
-*Put your pre‑trained CNN weights as `simple_cnn.pth` in the project root.*
+启动后端：uvicorn api_server:app --host 0.0.0.0 --port 1050
 
+2.参考https://github.com/minio/minio部署minio存放文件和中间过程
 
-## 在docker中作为服务启动
-安装依赖
-pip install --upgrade pip
-pip install "fastapi[all]" "uvicorn[standard]"
+3.参考https://github.com/open-webui/open-webui 用docker方式部署openwebui（前端）
 
-
+4.用docker方式部署openwebui的pipline功能(请自行查看相应教程)
 docker run -d --name pipelines \
   -p 9099:9099 \
   --add-host=host.docker.internal:host-gateway \
@@ -30,11 +22,7 @@ docker run -d --name pipelines \
   --restart always \
   ghcr.io/open-webui/pipelines:main
 
-
-docker restart pipelines
-docker logs -f pipelines
+docker logs -f pipelines #看piplines的输出
 
 
-启动 WebUI：export DATA_DIR=/home/wucz/openwebui-data && open-webui serve --port 8081
 
-启动后端：export OPENWEBUI_DATA_DIR=/home/wucz/openwebui-data && uvicorn api_server:app --host 0.0.0.0 --port 1050

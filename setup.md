@@ -4,8 +4,30 @@ docker pull docker.1ms.run/pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
 ## 启动容器
 docker run --gpus all -d -v /data/user:/data/user --network host --name wucz -it docker.1ms.run/pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
 
+docker rm -f wucz
+docker run -it --name wucz \
+  --gpus all \
+  -p 1050:1050 \
+  -v /data/user/wucz:/data/user/wucz \
+  -e OLLAMA_BASE_URL=http://10.11.0.109:11434 \
+  wucz:saved \
+  /bin/bash
+docker.1ms.run/pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
+docker network create llm-net
+docker network connect llm-net ollama
+
+docker run -d --name wucz \
+  --gpus all \
+  --network llm-net \
+  -p 1050:1050 \
+  -p 2630:2630 \
+  -v /data/user/wucz:/data/user/wucz \
+  -e OLLAMA_BASE_URL=http://ollama:11434 \
+  wucz:saved \
+  /bin/bash
+
 ## 给挂载文件夹权限
-chmod -R 777 /data/user
+chmod -R 777 /data/user/wucz
 
 ## 进入容器
 docker exec -it wucz /bin/bash
@@ -58,7 +80,7 @@ pip install setuptools-rust
 pip install faster_whisper
 
 ## 安装依赖包
-datasets fastapi transformers matplotlib 
+datasets fastapi transformers matplotlib minio python-multipart
 langchain langchain-core langchain-ollama langchain-openai langchain-text-splitters
 langgraph langgraph-checkpoint langgraph-prebuilt langgraph-sdk
 pypandoc python-docx pdfminer.six pytesseract pillow pdf2image
@@ -85,3 +107,5 @@ ls /opt/conda/lib | grep cudnn
 ## 实时推送
 pip install sse-starlette
 pip install sseclient-py
+pip install --upgrade pip
+pip install "fastapi[all]" "uvicorn[standard]"
